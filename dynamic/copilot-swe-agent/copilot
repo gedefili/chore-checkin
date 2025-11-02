@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Add the new cleanup step here
+      - name: Clean up untracked files
+        run: |
+          git stash --include-untracked || true
+          git clean -fd || true
+
+      - name: Build
+        run: make build
+
+      - name: Test
+        run: make test
